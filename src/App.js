@@ -1,23 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react';
+import firebase from './firebase';
 
 function App() {
+
+  const[token, setToken] = React.useState('');
+
+  useEffect(() => {
+    const messaging = firebase.messaging();
+    messaging.requestPermission()
+    .then((token) =>{
+        return messaging.getToken();
+    }).then(token =>{
+      setToken(token);
+      console.log('token : ' + token);
+    }).catch(err =>{
+      console.log(err)
+    })
+  }, [])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <h1>Token anda = {token}</h1>
     </div>
   );
 }
